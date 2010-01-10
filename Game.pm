@@ -68,19 +68,21 @@ sub run {
     print $self->{'board'}->string;
     my $done = 0;
     my $key; 
-    while ( not $done )  {  # $self->finished($max_rounds) and $key ne 'q' 
-        $key = lc(ReadKey(1));
-        $done = 1 if $key eq 'q';
-        $done ||= $self->tick($key);
+    while ( not $done )  { 
+        $key = lc(ReadKey(0.5));
         $self->{'time'} += 1;
+        
+        $done ||= $self->tick($key);
         $done = 1 if $max_rounds and $self->{'time'} >= $max_rounds;
+        $done = 1 if $key eq 'q';
+        
         system('clear');
         print $self->{'board'}->string;
         print "\nu(p), d(own), l(eft), r(right), q(uit)\n";
     };
     $self->done();
 
-    ReadMode 'normal';
+    ReadMode 'restore';
 
     return;
 };
