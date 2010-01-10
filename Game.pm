@@ -22,11 +22,42 @@ sub new  {
     return bless $self, $class;
 };
 
-sub finished  {
-    my ($self, $max_rounds) = @_;
+sub overlap  {
+	my ($a, $b ) = @_;
+	return 0 unless $a->{'row'} == $b->{'row'};
+	return 0 unless $a->{'col'} == $b->{'col'};
+	return 1;
+};
 
-    return 0 if not defined $max_rounds;
-    return $self->{'time'} > $max_rounds;
+sub tick  {
+    my ($self, $key) = @_;
+    my $done = 0;
+    my $phase = 0;
+    my @entities = @{ $self->{'board'}{'entities'} };
+    my $active = scalar(@entities);
+    while ($active )   {
+        $phase++;
+        for my $entity ( @entities )  {
+            if ( $entity->{'speed'} >= $phase )  {
+                $entity->move($self->{'board'}, $key);
+            }
+            if ( $entity->{'speed'} == $phase )  {
+                $active -= 1;
+            }
+        }
+    }
+    
+    my $quit = 0;
+    for my $i (0..$#entities)  {
+		for my $j ($i+1..$#entities)  {
+			if ( overlap($entities[$i], $entities[$j]) )  {
+				$quit ||= $entities[$i]->meet($entities[$j]);
+				$quit ||= $entities[$j]->meet($entities[$i]);
+			}
+		}
+	}
+    
+    return $quit;
 };
 
 sub run {
@@ -35,11 +66,14 @@ sub run {
     ReadMode 'cbreak';
     system('clear');
     print $self->{'board'}->string;
-    my $key = '';
-    while ( not $self->finished($max_rounds) and $key ne 'q' )  {
+    my $done = 0;
+    my $key; 
+    while ( not $done )  {  # $self->finished($max_rounds) and $key ne 'q' 
         $key = lc(ReadKey(1));
-        $self->{'board'}->tick($key);
+        $done = 1 if $key eq 'q';
+        $done ||= $self->tick($key);
         $self->{'time'} += 1;
+        $done = 1 if $max_rounds and $self->{'time'} >= $max_rounds;
         system('clear');
         print $self->{'board'}->string;
         print "\nu(p), d(own), l(eft), r(right), q(uit)\n";

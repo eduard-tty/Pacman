@@ -46,16 +46,16 @@ sub move  {
     my $new_row = $self->{'row'} + $row_delta;
     my $new_col = $self->{'col'} + $col_delta;
 
-    my $target  = $board->get($new_row, $new_col);
-
-    unless ( Pacman::Board::is_occupied($target) )  {
+    unless ( $board->is_occupied($new_row, $new_col) )  {
         $self->{'row'} = wrap( $self->{'row'} + $row_delta , $board->height);
         $self->{'col'} = wrap( $self->{'col'} + $col_delta , $board->width);
     }
 
-    # collision detection
-
     return;
+}
+
+sub meet  {
+	return 0;
 }
 
 1;

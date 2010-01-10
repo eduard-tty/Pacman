@@ -5,20 +5,33 @@ use warnings;
 
 use base 'Pacman::Critter';
 
-use Carp::Assert;
-
 use Pacman::Consts;
 use Pacman::Critter;
+use Pacman::Board;
 
 sub new {
     my ($class, $number) = @_;
-    assert($number <= 6, "Can't fit more then 6 ghosts in center room");
-    my $self = Pacman::Critter->new(12, 10+$number, UP, 1);
+
+    my $self = Pacman::Critter->new( Pacman::Board::ghost_start(), UP, 1);
     return bless $self, $class;
-}
+};
 
 sub char {
-    return GHOST();
-}
+    return GHOST;
+};
+
+sub meet {
+	my ($self, $other) = @_;
+	
+	if ( $other->isa('Pacman::Pacman') ) {
+		if ( $other->{'safe'} )  {
+			( $self->{'row'}, $self->{'col'} ) = Pacman::Board::ghost_start()
+		} else {
+			return 1;
+		};
+	}
+	
+	return 0;
+};
 
 1;

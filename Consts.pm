@@ -8,19 +8,19 @@ use Exporter::Lite;
 our @EXPORT = qw( 
 	LEFT_LEVEL 
 	UP DOWN LEFT RIGHT 
-	EMPTY WALL GHOST  PILL COOKIE
+	EMPTY WALL GHOST PILL COOKIE
 );
 
-sub UP()    { return 'up' };
-sub DOWN()  { return 'down' };
-sub LEFT()  { return 'left' };
-sub RIGHT() { return 'right' };
+sub UP()    { 'up'    };
+sub DOWN()  { 'down'  };
+sub LEFT()  { 'left'  };
+sub RIGHT() { 'right' };
 
-sub EMPTY()	 { return ' ' };
-sub WALL()   { return '#' };
-sub GHOST()  { return '@' };
-sub PILL()	 { return '.' };
-sub COOKIE() { return '*' };
+sub EMPTY()	 { ' ' };
+sub WALL()   { '#' };
+sub GHOST()  { '@' };
+sub PILL()	 { '.' };
+sub COOKIE() { '*' };
 
 # The left half of the level, the right half is the same, but mirrored.
 
@@ -37,7 +37,7 @@ sub LEFT_LEVEL() {
     ######.#.....#
     ######.#####_#
     ######.#####_#
-    ######.#______
+    ######.#__*___
     ######.#__###-
 	__________#___
     ######.##_####

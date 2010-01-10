@@ -12,8 +12,9 @@ use Pacman::Critter;
 sub new {
     my ($class) = @_;
     
-    my $self = Pacman::Critter->new(10, 14, LEFT(), 1);
+    my $self = Pacman::Critter->new(10, 14, LEFT, 1);
     $self->{'score'} = 0;
+    $self->{'safe'}  = 0;
 
     return bless $self, $class;
 }
@@ -29,7 +30,10 @@ sub move  {
     
     my $snack = $board->eat( $self->location );
     $self->{'score'} += $snack_value{$snack};
-
+    
+    $self->{'safe'} -= 1 if $self->{'safe'};
+    $self->{'safe'} = 20 + int(rand(5)) if $snack eq COOKIE;
+    
     return;
 }
 
@@ -37,7 +41,13 @@ my %faces = ( UP() => 'V',  DOWN() => '^',  LEFT() => '>',  RIGHT() => '<' );
 
 sub char {
     my ($self) = @_;
-    return $faces{ $self->{'dir'} } || '!';
+    return '?' if $self->{'safe'}; # change color in stead
+    return $faces{ $self->{'dir'} };
+}
+
+sub meet {
+	my ($self) = @_;
+	return $self->{'safe'} ? 0 : 1;
 }
 
 1;

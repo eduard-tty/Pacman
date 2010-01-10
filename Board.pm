@@ -22,12 +22,10 @@ sub make {
         push @{ $self->{'fields'} }, [ split(//,$line) ];
     }
 
-    bless $self, $class;
-
     push @{ $self->{'entities'} }, Pacman::Pacman->new();
     push @{ $self->{'entities'} }, Pacman::Ghost->new($_) for 1..$n_ghosts;
 
-    return $self;
+    return bless $self, $class;
 };
 
 sub height {
@@ -43,11 +41,12 @@ sub width {
 
 my %occupied = (
     WALL()  => 1,
-    GHOST() => 1,
+    GHOST() => 0,
 );
 
 sub is_occupied  {
-    my ($char) = @_;
+    my ($self, $row, $col) = @_;
+    my $char = $self->get($row, $col);
     return $occupied{$char} if exists $occupied{$char};
     return 0;
 }
@@ -77,38 +76,24 @@ sub string {
     return;
 };
 
-sub tick  {
-    my ($self, $key) = @_;
-    my $done = 0;
-    my $phase = 0;
-    my $active = scalar(@{ $self->{'entities'} });
-    while ($active )   {
-        $phase++;
-        for my $entity ( @{ $self->{'entities'} } )  {
-            if ( $entity->{'speed'} >= $phase )  {
-                $entity->move($self, $key);
-            }
-            if ( $entity->{'speed'} == $phase )  {
-                $active -= 1;
-            }
-        }
-    }
-
-    return;
-};
-
 sub eat {
 	my ($self, $row, $col) = @_;
 
-	my $char = $self->{'fields'}[$row][$col];
-	if ( $char eq PILL or $char eq COOKIE ) {
+	my $snack = $self->{'fields'}[$row][$col];
+	if ( $snack eq PILL or $snack eq COOKIE ) {
 		$self->{'fields'}[$row][$col] = EMPTY;
 	} else {
-		$char = EMPTY;
+		$snack = EMPTY;
 	}
 	
-	return $char;
+	return $snack;
 };
+
+my $placement = 0;
 	
+sub ghost_start {
+	$placement++;
+	return (12, 11 + $placement % 6);
+};
 
 1;
