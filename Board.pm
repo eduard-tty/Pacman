@@ -24,8 +24,8 @@ sub make {
 
     bless $self, $class;
 
-    push @{ $self->{'entities'} }, Pacman::Pacman->new( $self->center );
-    push @{ $self->{'entities'} }, Pacman::Ghost->new( $self->random_free_spot ) for 1..$n_ghosts;
+    push @{ $self->{'entities'} }, Pacman::Pacman->new();
+    push @{ $self->{'entities'} }, Pacman::Ghost->new($_) for 1..$n_ghosts;
 
     return $self;
 };
@@ -41,17 +41,6 @@ sub width {
     return scalar( @{ $self->{'fields'}[0] });
 };
 
-
-sub center  {
-    my ($self) = @_;
-
-    my $center_row = int( $self->height / 2 );
-    my $center_col = int( $self->width  / 2 );
-
-    return ($center_row, $center_col);
-};
-
-
 my %occupied = (
     WALL()  => 1,
     GHOST() => 1,
@@ -62,21 +51,6 @@ sub is_occupied  {
     return $occupied{$char} if exists $occupied{$char};
     return 0;
 }
-
-sub random_free_spot  {
-    my ($self) = @_;
-
-    my $char = WALL();
-    my ($row, $col);
-    while ( is_occupied($char) )  {
-        $row = int( rand($self->height) );
-        $col = int( rand($self->width) );
-        $char = $self->get($row, $col);
-    };
-
-    return ($row, $col);
-};
-
 
 sub get  {
     my ($self, $row, $col) = @_;
@@ -91,9 +65,8 @@ sub get  {
     return $char;
 };
 
-sub print {
+sub string {
     my ($self) = @_;
-    system('clear');
     for my $row (  0 ..  $self->height-1 )  {
         for my $col ( 0 .. $self->width-1 )  {
             print $self->get($row, $col);
@@ -123,5 +96,19 @@ sub tick  {
 
     return;
 };
+
+sub eat {
+	my ($self, $row, $col) = @_;
+
+	my $char = $self->{'fields'}[$row][$col];
+	if ( $char eq PILL or $char eq COOKIE ) {
+		$self->{'fields'}[$row][$col] = EMPTY;
+	} else {
+		$char = EMPTY;
+	}
+	
+	return $char;
+};
+	
 
 1;
