@@ -23,13 +23,6 @@ sub location  {
 	return ( $self->{'row'}, $self->{'col'} );
 }
 
-my %deltas = (
-    UP()    => [ -1,  0 ],
-    DOWN()  => [ +1,  0 ],
-    LEFT()  => [  0, -1 ],
-    RIGHT() => [  0, +1 ],
-);
-
 sub wrap  {
 	my ($coordinate, $over) = @_;
 	
@@ -42,7 +35,7 @@ sub wrap  {
 sub move  {
     my ($self, $board) = @_;
 
-    my ($row_delta, $col_delta ) = @{ $deltas{ $self->{'dir'} } };
+    my ($row_delta, $col_delta ) = @{ $DELTAS{ $self->{'dir'} } };
     my $new_row = $self->{'row'} + $row_delta;
     my $new_col = $self->{'col'} + $col_delta;
 

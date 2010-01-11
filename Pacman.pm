@@ -34,6 +34,8 @@ sub move  {
     $self->{'safe'} -= 1 if $self->{'safe'};
     $self->{'safe'} = 20 + int(rand(5)) if $snack eq COOKIE;
     
+    $board->{'smell'}[ $self->{'row'} ][ $self->{'col'} ] = 10; 
+    
     return;
 }
 

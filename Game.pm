@@ -57,6 +57,8 @@ sub tick  {
 		}
 	}
     
+    $self->{'board'}->visit_smell( sub { return $_[0] ? $_[0] -1 : 0; } ); 
+    
     return $quit;
 };
 
@@ -80,8 +82,7 @@ sub run {
         print $self->{'board'}->string;
         print "\nu(p), d(own), l(eft), r(right), q(uit)\n";
     };
-    $self->done();
-
+    
     ReadMode 'restore';
 
     return;

@@ -12,6 +12,7 @@ sub make {
     my $self = {
         fields      => [],
         entities    => [],
+        smell		=> [],
     };
 
     for  my $line ( split(/\n/, LEFT_LEVEL) )   {
@@ -24,8 +25,24 @@ sub make {
 
     push @{ $self->{'entities'} }, Pacman::Pacman->new();
     push @{ $self->{'entities'} }, Pacman::Ghost->new($_) for 1..$n_ghosts;
+    
+    bless $self, $class;
+    
+    $self->visit_smell( sub { return 0 } );
 
-    return bless $self, $class;
+    return $self;
+};
+
+sub visit_smell  {
+	 my ($self, $sub) = @_;
+
+    for my $row ( 0..$self->height )  {
+		for my $col ( 0..$self->width )  {
+   			$self->{'smell'}[$row][$col] = $sub->($self->{'smell'}[$row][$col]);
+		};
+	};
+	 
+	 return;
 };
 
 sub height {
