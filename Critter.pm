@@ -15,22 +15,22 @@ sub new  {
         dir     => $dir,
         speed   => $speed,
     }, $class;
-}
+};
 
 sub location  {
-	my ($self) = @_;
-	
-	return ( $self->{'row'}, $self->{'col'} );
-}
+    my ($self) = @_;
+
+    return ( $self->{'row'}, $self->{'col'} );
+};
 
 sub wrap  {
-	my ($coordinate, $over) = @_;
-	
-	$coordinate = $over -1 if $coordinate < 0;
-	$coordinate = 0 if $coordinate >= $over;
-	
-	return $coordinate;
-}
+    my ($coordinate, $over) = @_;
+
+    $coordinate = $over -1 if $coordinate < 0;
+    $coordinate = 0 if $coordinate >= $over;
+
+    return $coordinate;
+};
 
 sub move  {
     my ($self, $board) = @_;
@@ -45,10 +45,10 @@ sub move  {
     }
 
     return;
-}
+};
 
 sub meet  {
-	return 0;
-}
+    return 0;
+};
 
 1;

@@ -9,6 +9,9 @@ use Pacman::Game;
 
 Pacman::Game->new(3)->run();
 
-# hunt
+# TODO:
+# - hunt better
+# - clean up
+# - nicer speed handling
 
 1;
