@@ -1,13 +1,13 @@
 To me this coding-kata is about design up front. I took a little time
 to think about the data representation, since I was present at the
 devnology Marktplaats event and I took some pointers from the actual
-game. 
+game.
 
 It is not finished yet. The way ghost hunt for pacman is still
 clumsy/wrong and I did not spend much time on the user interface
 because that is not part of what I found interesting about the problem.
 
-It was not developed in a test driven style, but more of a prototype,
+It was not developed in a test driven. It is closer to a prototype,
 since refactoring the design was key to the exercise and tests stand
 in the way of that.
 
